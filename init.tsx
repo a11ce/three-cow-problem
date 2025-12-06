@@ -17,6 +17,8 @@ export function initializeThreeCow(): CowCtx {
 
   const ctx = {} as CowCtx;
 
+  ctx.gameName = "threeCow";
+
   ctx.log = log;
   ctx.input = input;
   ctx.layout = layout;

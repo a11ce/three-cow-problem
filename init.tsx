@@ -22,6 +22,36 @@ export function initializeThreeCow(): CowCtx {
   const audio = createAudioController();
   log.attachInputHandler(input);
 
+  const curtain = document.createElement("div");
+  curtain.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 1;
+    pointer-events: none;
+    z-index: 67;
+  `;
+  document.body.appendChild(curtain);
+  curtain.offsetHeight;
+  curtain.style.transition = "opacity 2s ease-in-out";
+
+  const fadeOut = (): Promise<void> => {
+    return new Promise((resolve) => {
+      curtain.style.opacity = "1";
+      setTimeout(resolve, 2000);
+    });
+  };
+
+  const fadeIn = (): Promise<void> => {
+    return new Promise((resolve) => {
+      curtain.style.opacity = "0";
+      setTimeout(resolve, 2000);
+    });
+  };
+
   const ctx = {} as CowCtx;
 
   ctx.gameName = "threeCow";
@@ -39,6 +69,9 @@ export function initializeThreeCow(): CowCtx {
   ctx.nessieState = "alive";
   ctx.tessieState = "alive";
   ctx.currentNight = 0;
+
+  ctx.fadeOut = fadeOut;
+  ctx.fadeIn = fadeIn;
 
   ctx.audio.init(ctx);
 

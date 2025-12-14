@@ -264,6 +264,10 @@ export function createCampCow(
     } else if (ctx.currentNight == 1) {
       await nessieTwine(ctx);
     }
+    ctx.conversationOver = true;
+    await ctx.task.runTask(() => {
+      x += speed;
+    });
   };
   return {
     getAssetPaths,

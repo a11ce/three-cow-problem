@@ -7,6 +7,9 @@ export interface CowCtx extends GameCtx {
   nessieState: CowState;
   tessieState: CowState;
   currentNight: number;
+  conversationOver: boolean;
+  fadeOut(): Promise<void>;
+  fadeIn(): Promise<void>;
 }
 
 export const getCowCtx = () => getGameCtx() as CowCtx;

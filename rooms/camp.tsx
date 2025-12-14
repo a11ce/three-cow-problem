@@ -17,8 +17,9 @@ export const camp = createResetRoom<CowCtx>((ctx) => {
   const tessie = createCampCow(1400, ctx.tessieState);
 
   return {
-    avatarPosition: { x: 100, y: 0 },
+    avatarPosition: { x: 200, y: 0 },
     objects: [tessie],
-    onEnter,
+      onEnter,
+      sideviewGfx: { width: 700, scrollDeadzone: 50 },
   };
 });

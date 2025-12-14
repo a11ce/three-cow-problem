@@ -4,8 +4,4 @@ import Debug from "@roc/components/Debug";
 import LogDisplay from "@roc/components/LogDisplay";
 import Slop from "./components/Slop";
 
-export const sideview = vSplit(
-  25,
-  SideviewRoom,
-  hSplit(25, Debug, hSplit(50, LogDisplay, Slop)),
-);
+export const sideview = vSplit(25, SideviewRoom, hSplit(75, LogDisplay, Slop));

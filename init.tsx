@@ -87,5 +87,21 @@ export function initializeThreeCow(): CowCtx {
 
   ctx.room.goTo(camp);
 
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "f") {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
+
+  window.addEventListener("click", (e) => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    }
+  });
+
   return ctx;
 }

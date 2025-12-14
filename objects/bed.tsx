@@ -14,6 +14,8 @@ export function createBed(x: number): GameObject<CowCtx> {
         ctx.log.write("Tessie can't sleep, go talk to her.");
       } else if (ctx.currentNight === 1) {
         ctx.log.write("Nessie can't sleep, go talk to her.");
+      } else if (ctx.currentNight === 2) {
+        ctx.log.write("Bessie can't sleep, go talk to her.");
       }
     } else {
       ctx.log.write("Go to sleep?");

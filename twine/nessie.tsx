@@ -158,7 +158,7 @@ export default function createTwineDialogue(
   }
 
   async function start(ctx: CowCtx) {
-    ctx.log.write('"Hey there, Nessie."');
+    await buttonHelper(ctx, '"Hey there, Nessie."');
     ctx.log.write('"Hiiii."');
     if (
       await buttonHelper(

@@ -3,6 +3,7 @@ import { Sprite } from "@roc/core/sprite";
 import type { CowCtx, CowState } from "../game";
 import createTwineDialogue from "../twine/tessie";
 import createNessieTwineDialogue from "../twine/nessie";
+import createBessieTwineDialogue from "../twine/bessie";
 
 export function createCampCow(
   startX: number,
@@ -58,6 +59,11 @@ export function createCampCow(
     buttonHelperMoreChoices,
   );
 
+  const bessieTwine = createBessieTwineDialogue(
+    buttonHelper,
+    buttonHelperMoreChoices,
+  );
+
   const getSprite = (_ctx: CowCtx) => {
     switch (state) {
       case "alive":
@@ -81,7 +87,6 @@ export function createCampCow(
   };
 
   async function tess0(ctx: CowCtx) {
-    ctx.log.write("Talk to Tessie!");
     await buttonHelper(ctx, "Hey there,Tessie.");
     ctx.log.write('"Hey there, Cow Poke"');
     if (
@@ -263,6 +268,8 @@ export function createCampCow(
       await tess0(ctx);
     } else if (ctx.currentNight == 1) {
       await nessieTwine(ctx);
+    } else if (ctx.currentNight == 2) {
+      await bessieTwine(ctx);
     }
     ctx.conversationOver = true;
     await ctx.task.runTask(() => {

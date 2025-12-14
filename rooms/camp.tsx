@@ -10,6 +10,10 @@ import { avatarSideview } from "../avatars";
 export const camp = createResetRoom<CowCtx>((ctx) => {
   //console.log(ctx);
   const onEnter = async (ctx: CowCtx) => {
+    if (ctx.currentNight == 3) {
+      return;
+    }
+
     ctx.avatar.set(avatarSideview);
     ctx.conversationOver = false;
     ctx.log.clear();
@@ -22,6 +26,11 @@ export const camp = createResetRoom<CowCtx>((ctx) => {
       ctx.setSlop("Z5DcTdVqqTI");
       ctx.log.write(
         `It's been a long fortnight and one day on the dusty trail.  The smell of burning wood permeates the air, and smoke clouds the  gibbous moon. The small town of Free Coyote Point can be seen peeking over the horizon.  After setting up camp and eating your nightly dinner of Beans and Popcorn you're just about ready for bed.`,
+      );
+    } else if (ctx.currentNight == 2) {
+      ctx.setSlop("orD6yIilR0A");
+      ctx.log.write(
+        "It's been a long fortnight and two days on the dusty trail. As you set up camp you finally see lights and smoke rising from just beyond the horizon. By tomorrow at noon you'll finally be in Mesa Springs Valley to collect your payment, and, more importantly, free yourself from your three irksome charges. It was time for one last set of nightly tasks and rituals and then freedom.",
       );
     }
     await ctx.fadeIn();

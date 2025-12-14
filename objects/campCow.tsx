@@ -9,7 +9,12 @@ export function createCampCow(
   startX: number,
   state: CowState,
 ): GameObject<CowCtx> {
-  const getAssetPaths = () => ["cow.png", "cross.png"];
+  const getAssetPaths = () => [
+    "bessie.png",
+    "nessie.png",
+    "tessie.png",
+    "cow.png",
+  ];
   const xAfterMoving = 600;
   const speed = 2.5;
   let x = startX;
@@ -64,13 +69,16 @@ export function createCampCow(
     buttonHelperMoreChoices,
   );
 
-  const getSprite = (_ctx: CowCtx) => {
-    switch (state) {
-      case "alive":
-        return Sprite.fromFile("cow.png", 0.3).flip();
-      case "dead":
-        return Sprite.fromFile("cross.png", 0.3);
+  const getSprite = (ctx: CowCtx) => {
+    if (ctx.currentNight === 0) {
+      return Sprite.fromFile("tessie.png", 0.3);
+    } else if (ctx.currentNight === 1) {
+      return Sprite.fromFile("nessie.png", 0.3);
+    } else if (ctx.currentNight === 2) {
+      return Sprite.fromFile("bessie.png", 0.3);
     }
+
+    return Sprite.fromFile("cow.png", 0.3).flip();
   };
 
   const onEnterRoom = async (ctx: CowCtx) => {

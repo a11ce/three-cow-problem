@@ -1,5 +1,11 @@
 import type { CowCtx } from "../game";
 
+const writePlayerDialogueWithoutQuotes = (ctx: CowCtx, text: string) => {
+  ctx.log.writeHTML(() => (
+    <span style={{ "margin-left": "20px" }}>{text}</span>
+  ));
+};
+
 export default function createTwineDialogue(
   buttonHelper: (
     ctx: CowCtx,
@@ -12,7 +18,8 @@ export default function createTwineDialogue(
   ) => Promise<number>,
 ) {
   async function Jack(ctx: CowCtx) {
-    ctx.log.write(
+    writePlayerDialogueWithoutQuotes(
+      ctx,
       '"Okay here we go... Once upon a Time there was a little Cow named Jack who lived with her mom. They were both very poor, and their only possesion was an unnamed old woman. Jack’s mom sent her to the market to sell the old woman, for whatever she could get so that they would have money to pay for their streaming services. At the market she decided to sell the old woman for the price of three magic beans. Now normally that would be an excellent deal, but Jack’s mother had a deadly magical legume allergy.  When Jack got home, her mother threw the beans out the window, and had to go to the ER. When they got back the next morning there was a giant beanstalk in their yard where Mrs.Jack threw the beans. Jack had a penchant for climbing due to probably goat ancestry, and immediately climbed to the very top. At the top of the Beanstalk lived a sky-whale who ate cows (can you imagine?). The sky-whale had a massive high yield savings account left to her by her exceedingly rich sky-parents, and would use the funds to pay off the police and media so she could swoop down from the sky in the dead of night to steal calves to feed her cow eating habit. All in all she was very bad. Jack, being in on this open secret, felt it completely justified to steal the login info for said savings account from the little sticky note the sky-whale left on her computer monitor. In a few short weeks Jack and her mother were living in a Luxembourg mansion with their newfound wealth, where they lived happily ever after. The end."',
     );
     ctx.log.write(
@@ -192,8 +199,7 @@ export default function createTwineDialogue(
 
   async function yesjack(ctx: CowCtx) {
     ctx.log.write('"Finally. Yes please"');
-    ctx.log.write('//no repeating the phrase "tell story" pl0x');
-    await buttonHelper(ctx, "Tell story.");
+    await ctx.log.showButtons("Tell story.");
     return await Jack(ctx);
   }
 

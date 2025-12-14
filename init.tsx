@@ -66,7 +66,7 @@ export function initializeThreeCow(): CowCtx {
   ctx.audio = audio;
   ctx.room = createRoomController(ctx);
 
-  ctx.color.setDark("#2C1A00");
+  ctx.color.setDark("#08586E");
   // ctx.color.setLight("#6B5114");
 
   ctx.bessieState = "alive";

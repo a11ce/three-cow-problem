@@ -2,6 +2,7 @@ import type { CowCtx } from "../game";
 import { createResetRoom } from "@roc/core/room";
 import { createCampCow } from "../objects/campCow";
 import { createBed } from "../objects/bed";
+import { createCampfire } from "../objects/campfire";
 import { avatarSideview } from "../avatars";
 
 //const bessie = createCampCow(600, ctx.bessieState);
@@ -38,10 +39,11 @@ export const camp = createResetRoom<CowCtx>((ctx) => {
   const tessie = createCampCow(1400, ctx.tessieState);
 
   const bed = createBed(50);
+  const campfire = createCampfire(320);
 
   return {
     avatarPosition: { x: 200, y: 0 },
-    objects: [tessie, bed],
+    objects: [tessie, bed, campfire],
     onEnter,
     sideviewGfx: { width: 700, scrollDeadzone: 50 },
   };

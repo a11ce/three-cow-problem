@@ -4,9 +4,9 @@ import type { CowCtx } from "../game";
 import { camp } from "../rooms/camp";
 
 export function createBed(x: number): GameObject<CowCtx> {
-  const getAssetPaths = () => [];
+  const getAssetPaths = () => ["bed.png"];
   const getX = () => x;
-  const getSprite = (_ctx: CowCtx) => Sprite.circle(20, "bed");
+  const getSprite = (_ctx: CowCtx) => Sprite.fromFile("bed.png", 0.5);
 
   const onInteract = async (ctx: CowCtx) => {
     if (!ctx.conversationOver) {

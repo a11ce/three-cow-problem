@@ -1,7 +1,7 @@
 import { type GameObject } from "@roc/core/gameObject";
 import { Sprite } from "@roc/core/sprite";
 import type { CowCtx, CowState } from "../game";
-
+import createTwineDialogue from "../twine/tessie";
 
 export function createCampCow(
   startX: number,
@@ -15,28 +15,43 @@ export function createCampCow(
   let hasMoved = false;
   const getX = () => x;
 
-    async function  buttonHelper(ctx: CowCtx, option1: string, option2: string = "") {
-        var equalsoption1 = true;
-        if (option2 == "") {
-           await ctx.log.showButtons(option1);
-        } else {
-            equalsoption1 = await ctx.log.showButtons(option1, option2) == option1;
-        }
-        if  (equalsoption1){
-            ctx.log.write("\""+ option1+ "\"");
-        } else {
-            ctx.log.write("\""+ option2+ "\"");
-        }
-        return equalsoption1
+  const writePlayerDialogue = (ctx: CowCtx, text: string) => {
+    ctx.log.writeHTML(() => (
+      <span style={{ "margin-left": "20px" }}>"{text}"</span>
+    ));
+  };
 
+  const buttonHelper = async (
+    ctx: CowCtx,
+    option1: string,
+    option2: string = "",
+  ) => {
+    var equalsoption1 = true;
+    if (option2 == "") {
+      await ctx.log.showButtons(option1);
+    } else {
+      equalsoption1 = (await ctx.log.showButtons(option1, option2)) == option1;
     }
-    function tess01(ctx:CowCtx) {
-        ctx.log.write("Talk to Tessie!")
-    }
-   async function tess02(ctx: CowCtx) {
-       await buttonHelper(ctx, "Hey there,Tessie.");
-        ctx.log.write("\"Hey there, Cow Poke\"");
-    }
+    const chosenText = equalsoption1 ? option1 : option2;
+    writePlayerDialogue(ctx, chosenText);
+    return equalsoption1;
+  };
+
+  const buttonHelperMoreChoices = async (
+    ctx: CowCtx,
+    ...options: string[]
+  ): Promise<number> => {
+    const chosen = await ctx.log.showButtons(...options);
+    const index = options.indexOf(chosen);
+    writePlayerDialogue(ctx, chosen);
+    return index;
+  };
+
+  const tessieTwine = createTwineDialogue(
+    buttonHelper,
+    buttonHelperMoreChoices,
+  );
+
   const getSprite = (_ctx: CowCtx) => {
     switch (state) {
       case "alive":
@@ -58,64 +73,195 @@ export function createCampCow(
       isMovingRight = false;
     }
   };
-    const onEnterInteractRange = async (ctx: CowCtx) => {
-        if (ctx.currentNight == 0) {
-            tess01(ctx);
-            await tess02(ctx);
-                if ((await ctx.log.showButtons("Here for some before bed S'mores?", "Can't sleep again, huh?")) === "Here for some before bed S'mores?") {
-                    ctx.log.write("\"Here for some before bed S'mores?\"")
-                    ctx.log.write("\"Noooo.\"")
-                    if ((await ctx.log.showButtons("Here for a campfire sing-along?", "Can't sleep again, huh?")) === "Here for a campfire sing-along?") {
-                        ctx.log.write("\"Here for a campfire sing-along?\"")
-                        ctx.log.write("\"Not exactlyyy.\"")
-                        if ((await ctx.log.showButtons("Here for a shiatzu massage?", "Can't sleep again, huh?")) === "Here for a shiatzu massage?") {
-                            ctx.log.write("\"Here for a shiatzu massage?\"")
-                            ctx.log.write("\"Noooooooo.\"")
-                            if ((await ctx.log.showButtons("Here to give me a shiatzu massage?", "Can't sleep again, huh?")) === "Here to give me a shiatzu massage?") {
-                                ctx.log.write("\"Here to give me a shiatzu massage?\"")
-                                ctx.log.write("\"NOOooo!\"")
-                            }
-                                if ((await ctx.log.showButtons("Can't sleep again, huh?")) === "Can't sleep again, huh?") {
-                            }
-                        }
-                    }
-                }
-                ctx.log.write("\"Can't sleep again, huh?\"")
-                ctx.log.write("\"....yeahh. Would you sing me a lullaby?\"")
-                if ((await ctx.log.showButtons("Of course. Get cozy.")) === "Of course. Get cozy.") {
-                    ctx.log.write("\"Of course. Get cozy.\"")
-                    if ((await ctx.log.showButtons("It's nighttime in the desert-")) === "It's nighttime in the desert-") {
-                        ctx.log.write("\"It's nighttime in the desert-\"")
-                        if ((await ctx.log.showButtons("and the wind is dying down", "and sand is fast asleep")) === "and the wind is dying down") {
-                            ctx.log.write("\"and the wind is dying down\"")
-                            ctx.log.write("\"All the boys are in their bedrolls and the cows are\"")
-                            if ((await ctx.log.showButtons("soft and brown", "wearing gowns")) === "soft and brown") {
-                                ctx.log.write("\"soft and brown\"")
-                            } else {
-                                ctx.log.write("\"wearing gowns\"")
-                                ctx.log.write("\"What?\"")
-                            }
-                        } else {
-                            ctx.log.write("\"and the sand is fast asleep.\"")
-                            ctx.log.write("\"oh no it's another weird one\"")
-                            ctx.log.write("\"All the boys are in their bedrolls and the cows are\"")
-                            if ((await ctx.log.showButtons("with the sheep", "in a heap")) === "with the sheep") {
-                                ctx.log.write("\"with the sheep\"")
-                            } else {
-                                ctx.log.write("\"in a heap\"")
-                            }
-                        }
-                    }
-                }
-                
-            
-        }
+
+  async function tess0(ctx: CowCtx) {
+    ctx.log.write("Talk to Tessie!");
+    await buttonHelper(ctx, "Hey there,Tessie.");
+    ctx.log.write('"Hey there, Cow Poke"');
+    if (
+      await buttonHelper(
+        ctx,
+        "Here for some before bed S'mores?",
+        "Can't sleep again, huh?",
+      )
+    ) {
+      return await tess1(ctx);
+    } else {
+      return await tess4(ctx);
     }
+  }
+
+  async function tess1(ctx: CowCtx) {
+    ctx.log.write('"Noooo."');
+    if (
+      await buttonHelper(
+        ctx,
+        "Here for a campfire sing-along?",
+        "Can't sleep again, huh?",
+      )
+    ) {
+      return await tess2(ctx);
+    } else {
+      return await tess4(ctx);
+    }
+  }
+
+  async function tess2(ctx: CowCtx) {
+    ctx.log.write('"Not exactlyyy."');
+    if (
+      await buttonHelper(
+        ctx,
+        "Here for a shiatzu massage?",
+        "Can't sleep again, huh?",
+      )
+    ) {
+      return await tess3(ctx);
+    } else {
+      return await tess4(ctx);
+    }
+  }
+
+  async function tess3(ctx: CowCtx) {
+    ctx.log.write('"Noooooooo."');
+    if (
+      await buttonHelper(
+        ctx,
+        "Here to give me a shiatzu massage?",
+        "Can't sleep again, huh?",
+      )
+    ) {
+      ctx.log.write('"NOOooo!"');
+      await buttonHelper(ctx, "Can't sleep again, huh?");
+    }
+    return await tess4(ctx);
+  }
+
+  async function tess4(ctx: CowCtx) {
+    ctx.log.write('"....yeahh. Would you sing me a lullaby?"');
+    await buttonHelper(ctx, "Of course. Get cozy.");
+    await buttonHelper(ctx, "It's nighttime in the desert-");
+    if (
+      await buttonHelper(
+        ctx,
+        "and the wind is dying down",
+        "and sand is fast asleep",
+      )
+    ) {
+      return await tess5(ctx);
+    } else {
+      ctx.log.write('"oh no it\'s another weird one"');
+      return await tess6(ctx);
+    }
+  }
+
+  async function tess5(ctx: CowCtx) {
+    ctx.log.write('"All the boys are in their bedrolls and the cows are"');
+    if (await buttonHelper(ctx, "soft and brown", "wearing gowns")) {
+      return await tess7(ctx);
+    } else {
+      ctx.log.write('"What?"');
+      return await tess7(ctx);
+    }
+  }
+
+  async function tess6(ctx: CowCtx) {
+    ctx.log.write('"All the boys are in their bedrolls and the cows are"');
+    await buttonHelper(ctx, "with the sheep", "in a heap");
+    return await tess7(ctx);
+  }
+
+  async function tess7(ctx: CowCtx) {
+    ctx.log.write("The moon is shining bright above. The stars are-");
+    if (await buttonHelper(ctx, "shining too", "its little friends")) {
+      return await tess8(ctx);
+    } else {
+      ctx.log.write('"That\'s cute"');
+      return await tess9(ctx);
+    }
+  }
+
+  async function tess8(ctx: CowCtx) {
+    ctx.log.write('"And soon the aforementioned cows and boys"');
+    if (await buttonHelper(ctx, "will take a snooze", "will eat some stew")) {
+      return await tess10(ctx);
+    } else {
+      ctx.log.write('"But we just had s\'mores"');
+      return await tess10(ctx);
+    }
+  }
+
+  async function tess9(ctx: CowCtx) {
+    ctx.log.write('"And soon the aforementioned cows and boys"');
+    if (await buttonHelper(ctx, "to dreamland wend", "all catch the bends")) {
+      return await tess10(ctx);
+    } else {
+      ctx.log.write('"Like what divers get?"');
+      return await tess10(ctx);
+    }
+  }
+
+  async function tess10(ctx: CowCtx) {
+    ctx.log.write('"So rest easy, lay your head down, and"');
+    if (
+      await buttonHelper(
+        ctx,
+        "just gently close your eyes",
+        "sail off to Dream Isle",
+      )
+    ) {
+      return await tess11(ctx);
+    } else {
+      ctx.log.write('"Ooooh nautical"');
+      return await tess12(ctx);
+    }
+  }
+
+  async function tess11(ctx: CowCtx) {
+    ctx.log.write("'Cause soon the day will start again");
+    if (
+      await buttonHelper(
+        ctx,
+        "the big ol sun will rise",
+        "the old day will have died",
+      )
+    ) {
+      return await tess13(ctx);
+    } else {
+      ctx.log.write('"Why so morbid?"');
+      return await tess13(ctx);
+    }
+  }
+
+  async function tess12(ctx: CowCtx) {
+    ctx.log.write("'Cause soon the day will start again");
+    if (
+      await buttonHelper(
+        ctx,
+        "sleep tight for just a while",
+        "time flows on like the nile",
+      )
+    ) {
+      return await tess13(ctx);
+    } else {
+      ctx.log.write('"Kinda pretentious IMO, but okay."');
+      return await tess13(ctx);
+    }
+  }
+
+  async function tess13(ctx: CowCtx) {
+    return await tessieTwine(ctx);
+  }
+
+  const onEnterInteractRange = async (ctx: CowCtx) => {
+    if (ctx.currentNight == 0) {
+      await tess0(ctx);
+    }
+  };
   return {
     getAssetPaths,
     getX,
     getSprite,
-      onEnterRoom,
-    onEnterInteractRange
+    onEnterRoom,
+    onEnterInteractRange,
   };
 }

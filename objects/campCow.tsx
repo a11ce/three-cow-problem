@@ -2,6 +2,7 @@ import { type GameObject } from "@roc/core/gameObject";
 import { Sprite } from "@roc/core/sprite";
 import type { CowCtx, CowState } from "../game";
 import createTwineDialogue from "../twine/tessie";
+import createNessieTwineDialogue from "../twine/nessie";
 
 export function createCampCow(
   startX: number,
@@ -48,6 +49,11 @@ export function createCampCow(
   };
 
   const tessieTwine = createTwineDialogue(
+    buttonHelper,
+    buttonHelperMoreChoices,
+  );
+
+  const nessieTwine = createNessieTwineDialogue(
     buttonHelper,
     buttonHelperMoreChoices,
   );
@@ -255,6 +261,8 @@ export function createCampCow(
   const onEnterInteractRange = async (ctx: CowCtx) => {
     if (ctx.currentNight == 0) {
       await tess0(ctx);
+    } else if (ctx.currentNight == 1) {
+      await nessieTwine(ctx);
     }
   };
   return {

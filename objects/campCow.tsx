@@ -63,7 +63,28 @@ export function createCampCow(
                 ctx.log.write("\"....yeahh. Would you sing me a lullaby?\"")
                 if ((await ctx.log.showButtons("Of course. Get cozy.")) === "Of course. Get cozy.") {
                     ctx.log.write("\"Of course. Get cozy.\"")
-
+                    if ((await ctx.log.showButtons("It's nighttime in the desert-")) === "It's nighttime in the desert-") {
+                        ctx.log.write("\"It's nighttime in the desert-\"")
+                        if ((await ctx.log.showButtons("and the wind is dying down", "and sand is fast asleep")) === "and the wind is dying down") {
+                            ctx.log.write("\"and the wind is dying down\"")
+                            ctx.log.write("\"All the boys are in their bedrolls and the cows are\"")
+                            if ((await ctx.log.showButtons("soft and brown", "wearing gowns")) === "soft and brown") {
+                                ctx.log.write("\"soft and brown\"")
+                            } else {
+                                ctx.log.write("\"wearing gowns\"")
+                                ctx.log.write("\"What?\"")
+                            }
+                        } else {
+                            ctx.log.write("\"and the sand is fast asleep.\"")
+                            ctx.log.write("\"oh no it's another weird one\"")
+                            ctx.log.write("\"All the boys are in their bedrolls and the cows are\"")
+                            if ((await ctx.log.showButtons("with the sheep", "in a heap")) === "with the sheep") {
+                                ctx.log.write("\"with the sheep\"")
+                            } else {
+                                ctx.log.write("\"in a heap\"")
+                            }
+                        }
+                    }
                 }
                 
             }

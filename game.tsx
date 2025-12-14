@@ -10,6 +10,8 @@ export interface CowCtx extends GameCtx {
   conversationOver: boolean;
   fadeOut(): Promise<void>;
   fadeIn(): Promise<void>;
+  getSlop(): string;
+  setSlop(id: string): void;
 }
 
 export const getCowCtx = () => getGameCtx() as CowCtx;

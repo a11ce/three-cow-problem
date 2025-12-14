@@ -11,6 +11,7 @@ import { createAudioController } from "@roc/core/audio";
 //import { createInventory } from "./inventory";
 import { camp } from "./rooms/camp";
 import type { CowCtx } from "./game";
+import { createSignal } from "solid-js";
 
 export function initializeThreeCow(): CowCtx {
   const log = createLog();
@@ -65,6 +66,9 @@ export function initializeThreeCow(): CowCtx {
   ctx.audio = audio;
   ctx.room = createRoomController(ctx);
 
+  ctx.color.setDark("#2C1A00");
+  // ctx.color.setLight("#6B5114");
+
   ctx.bessieState = "alive";
   ctx.nessieState = "alive";
   ctx.tessieState = "alive";
@@ -72,6 +76,10 @@ export function initializeThreeCow(): CowCtx {
 
   ctx.fadeOut = fadeOut;
   ctx.fadeIn = fadeIn;
+
+  const [getSlop, setSlop] = createSignal("");
+  ctx.getSlop = getSlop;
+  ctx.setSlop = setSlop;
 
   ctx.audio.init(ctx);
 
